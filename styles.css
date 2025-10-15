@@ -48,6 +48,10 @@
     flex:auto;
 }
 
+#zero-btn{
+    flex:auto 7;
+}
+
 button{
     background-color: rgb(240, 187, 144);
     border: 1px solid rgb(94, 144, 160);

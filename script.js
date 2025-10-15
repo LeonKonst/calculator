@@ -16,23 +16,100 @@ function divide(a, b){
 
 let firstNumber = "";
 let secondNumber = "";
-let operator = "";
+let operator;
 
 function operate(a, b, operator){
     return operator(a,b);
 }
 
-
 const digitBtns = document.querySelector("#digit-buttons");
 const display = document.querySelector("#display");
-
-
+const operatorBtns = document.querySelector("#operator-buttons")
 
 digitBtns.addEventListener("click", (e) => {
-    if(e.target.tagName==="BUTTON"){
-        display.textContent += e.target.value;
-        firstNumber += e.target.value;
-        
+        if(e.target.tagName==="BUTTON"){
+            handleDigitsClick(e.target.value);  
+        }
+    }
+);
+
+operatorBtns.addEventListener("click", (e) => {
+        if(e.target.tagName==="BUTTON"){
+            handleOperationsClick(e.target.value);
+        }
+    }
+);
+
+function handleOperationsClick(operation){
+    if(operation==="clear"){
+            handleClear();
+            return
+    } 
+    if(operator&&secondNumber!==""){
+        handleEqual()
+        operation= undefined;
+    } 
+    switch (operation) {
+        case "plus":
+            handleOperatorDisplay("+");
+            operator = add;
+            break;
+        case "minus":
+            handleOperatorDisplay("-");  
+            operator = substract;
+            break;
+        case "multiply":
+            handleOperatorDisplay("*"); 
+            operator = multiply;
+            break;
+        case "divide":
+            handleOperatorDisplay("/");  
+            operator = divide;
+            break; 
+        case "equal":
+            handleEqual();
+            break;      
+        default:
+            break;
     }
 }
-);
+
+
+function handleClear(){
+    firstNumber = "";
+    secondNumber = "";
+    operator = undefined;
+    display.textContent = "";
+}
+
+function handleOperatorDisplay(operatorsSign){
+    if(operator === undefined && secondNumber === ""){
+        display.textContent += operatorsSign;
+    } else {
+        display.textContent = firstNumber + operatorsSign;
+    }
+}
+
+
+function handleEqual(){
+    if(firstNumber===""){
+        firstNumber = "0";
+    } else if(secondNumber===""){
+            operator= undefined;
+    } else {       
+        firstNumber = Math.floor(operator(parseFloat(firstNumber),parseFloat(secondNumber))*10000)/10000;
+    }
+
+    display.textContent = firstNumber
+    operator=undefined;
+    secondNumber="";        
+}
+
+function handleDigitsClick(digit){
+    display.textContent+=digit;
+    if(!operator){
+        firstNumber +=digit;
+    } else {
+        secondNumber +=digit;
+    }
+}
