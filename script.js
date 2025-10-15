@@ -45,6 +45,10 @@ function handleOperationsClick(operation){
             handleClear();
             return
     } 
+    if(operation==="backspace"){
+            handleBackspace();
+            return
+    } 
     if(operator&&secondNumber!==""){
         handleEqual()
         operation= undefined;
@@ -111,5 +115,17 @@ function handleDigitsClick(digit){
         firstNumber +=digit;
     } else {
         secondNumber +=digit;
+    }
+}
+
+
+function handleBackspace(){
+    display.textContent = display.textContent.slice(0,-1);
+    if(secondNumber!==""){
+        secondNumber = secondNumber.slice(0,-1);
+    } else if(operator&&secondNumber===""){
+        operator= undefined;
+    } else {
+        firstNumber = firstNumber.slice(0,-1);
     }
 }
