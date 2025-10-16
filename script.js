@@ -51,7 +51,6 @@ function handleOperationsClick(operation){
     } 
     if(operator&&secondNumber!==""){
         handleEqual()
-        operation= undefined;
     } 
     switch (operation) {
         case "plus":
@@ -101,7 +100,7 @@ function handleEqual(){
     } else if(secondNumber===""){
             operator= undefined;
     } else {       
-        firstNumber = Math.floor(operator(parseFloat(firstNumber),parseFloat(secondNumber))*10000)/10000;
+        firstNumber = String(Math.floor(operator(parseFloat(firstNumber),parseFloat(secondNumber))*10000)/10000);
     }
 
     display.textContent = firstNumber
@@ -110,12 +109,18 @@ function handleEqual(){
 }
 
 function handleDigitsClick(digit){
-    display.textContent+=digit;
-    if(!operator){
-        firstNumber +=digit;
+    if(!operator&&firstNumber==="0"){
+        display.textContent = digit;
+        firstNumber = digit;
     } else {
-        secondNumber +=digit;
+        display.textContent+=digit;
+        if(!operator){
+            firstNumber +=digit;
+        } else {
+            secondNumber +=digit;
+        }
     }
+
 }
 
 
@@ -129,3 +134,44 @@ function handleBackspace(){
         firstNumber = firstNumber.slice(0,-1);
     }
 }
+
+
+document.addEventListener("keydown", (e)=>{
+    let operation ="";
+        if(e.key>=0&&e.key<=9) {
+            handleDigitsClick(e.key)
+        } else if (e.key==="."||e.key===","){
+            handleDigitsClick(".")
+        
+        }else {
+            switch(e.key){
+                case "+":
+                    operation = "plus";
+                    break;
+                case "-":
+                    operation = "minus";
+                    break;
+                case "*":
+                    operation = "multiply";
+                    break;
+                case "/":
+                    operation = "divide";
+                    break;
+                case "Enter":
+                case "=":
+                    operation = "equal";
+                    break;
+                case "Backspace":
+                    handleBackspace()
+                    return;
+                case "Delete":
+                    handleClear();
+                    return;
+                default:
+                    return;    
+            }
+        handleOperationsClick(operation)
+            
+        }
+    }
+)
