@@ -25,6 +25,7 @@ function operate(a, b, operator){
 const digitBtns = document.querySelector("#digit-buttons");
 const display = document.querySelector("#display");
 const operatorBtns = document.querySelector("#operator-buttons")
+const decimalBtn = document.querySelector("#dot-btn")
 
 digitBtns.addEventListener("click", (e) => {
         if(e.target.tagName==="BUTTON"){
@@ -41,6 +42,7 @@ operatorBtns.addEventListener("click", (e) => {
 );
 
 function handleOperationsClick(operation){
+    decimalBtn.disabled = false;
     if(operation==="clear"){
             handleClear();
             return
@@ -83,6 +85,7 @@ function handleClear(){
     secondNumber = "";
     operator = undefined;
     display.textContent = "";
+    decimalBtn.disabled = false;
 }
 
 function handleOperatorDisplay(operatorsSign){
@@ -105,10 +108,16 @@ function handleEqual(){
 
     display.textContent = firstNumber
     operator=undefined;
-    secondNumber="";        
+    secondNumber="";
+    if(firstNumber.includes(".")){
+        decimalBtn.disabled = true;
+    }  
 }
 
 function handleDigitsClick(digit){
+    if(digit==="."){
+        decimalBtn.disabled = !decimalBtn.disabled;
+    }
     if(!operator&&firstNumber==="0"){
         display.textContent = digit;
         firstNumber = digit;
@@ -140,9 +149,8 @@ document.addEventListener("keydown", (e)=>{
     let operation ="";
         if(e.key>=0&&e.key<=9) {
             handleDigitsClick(e.key)
-        } else if (e.key==="."||e.key===","){
+        } else if ((e.key==="."||e.key===",")&&!decimalBtn.disabled){
             handleDigitsClick(".")
-        
         }else {
             switch(e.key){
                 case "+":
